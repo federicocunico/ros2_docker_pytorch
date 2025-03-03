@@ -1,0 +1,12 @@
+FROM osrf/ros:jazzy-desktop
+
+RUN apt update && apt install -y python3-pip python3-venv
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# since latest ubuntu, to install local packages you need to do --break-system-packages
+
+
+WORKDIR /ws
+
+CMD [ "/bin/bash" ]

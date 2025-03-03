@@ -1,7 +1,14 @@
-FROM osrf/ros:jazzy-desktop
+FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+ARG DEBIAN_FRONTEND=noninteractive
 
-RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash"
+# install ros2
+RUN apt update \
+    && apt install -y software-properties-common curl \
+    && add-apt-repository universe \
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null \
+    && apt update \
+    && apt install -y ros-dev-tools
 
-WORKDIR /ws
+RUN apt update && apt install -y ros-humble-desktop
 
-CMD [ "/bin/bash" ]
