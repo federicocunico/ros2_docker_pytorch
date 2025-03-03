@@ -1,3 +1,3 @@
 ./build.sh
 
-docker run -v `pwd`:/ws -it --rm --name ros2_package ros2_package
+docker run --gpus all -v `pwd`:/workspace -w /workspace -it --rm --name ros2_package ros2_package

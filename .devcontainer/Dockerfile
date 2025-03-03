@@ -1,14 +1,15 @@
-FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
-ARG DEBIAN_FRONTEND=noninteractive
+FROM osrf/ros:jazzy-desktop
 
-# install ros2
 RUN apt update \
-    && apt install -y software-properties-common curl \
-    && add-apt-repository universe \
-    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null \
-    && apt update \
-    && apt install -y ros-dev-tools
+    && apt install -y python3-pip python3-venv
+    # && rosdep update \
+    # && rosdep install --from-paths src --ignore-src -y
 
-RUN apt update && apt install -y ros-humble-desktop
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
+# since latest ubuntu, to install local packages you need to do --break-system-packages
+RUN pip3 install --break-system-packages torch torchvision torchaudio
+
+WORKDIR /workspace
+
+CMD [ "/bin/bash" ]
